@@ -9,8 +9,8 @@ This is a Django project that can be easily extended to meet your needs. It uses
 
 ## Installation
 
-1. Clone this repository to your computer with the command `git clone https://github.com/myusername/myproject.git`
-2. Navigate to the project directory with the command `cd myproject`
+1. Clone this repository to your computer
+2. Navigate to the project directory
 3. Build the Docker image with the command `docker-compose build`
 4. Start the project with the command `docker-compose up`
 
