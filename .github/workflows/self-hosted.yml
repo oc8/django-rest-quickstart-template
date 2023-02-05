@@ -1,0 +1,30 @@
+name: Django Deployment Workflow
+
+on: [push]
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    steps:
+    - name: Change file owner
+      run: |
+        sudo chown -R $(id -u):$(id -g) /home/ubuntu/actions-runner/_work
+
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.9
+
+    - name: Build Docker Images
+      run: |
+        cp ../.env .
+        docker-compose build
+        docker-compose run backend python manage.py makemigrations
+        docker-compose run backend python manage.py migrate
+
+    - name: Run Deployment commands
+      run: |
+        docker-compose up --build -d
