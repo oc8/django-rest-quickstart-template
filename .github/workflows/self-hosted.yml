@@ -8,7 +8,12 @@ jobs:
     steps:
     - name: Change file owner
       run: |
-        sudo chown -R $(id -u):$(id -g) /home/ubuntu/actions-runner/_work
+        sudo chown -R $(id -u):$(id -g) ../../
+
+    - name: Check if folder exists
+      run: |
+        echo "Linking to /var/www/${{ github.event.repository.name }}"
+        sudo mkdir -p /var/www/${{ github.event.repository.name }}/static
 
     - name: Checkout code
       uses: actions/checkout@v2
@@ -21,10 +26,12 @@ jobs:
     - name: Build Docker Images
       run: |
         cp ../.env .
-        docker-compose build
-        docker-compose run backend python manage.py makemigrations
-        docker-compose run backend python manage.py migrate
+        docker-compose -f docker-compose.prod.yml build
+        docker-compose -f docker-compose.prod.yml run backend python manage.py check --deploy
+        docker-compose -f docker-compose.prod.yml run backend python manage.py makemigrations
+        docker-compose -f docker-compose.prod.yml run backend python manage.py migrate
+        docker-compose -f docker-compose.prod.yml run backend python ./manage.py createsuperuser --noinput 2> /dev/null || true
 
     - name: Run Deployment commands
       run: |
-        docker-compose up --build -d
+        docker-compose -f docker-compose.prod.yml up --build -d
