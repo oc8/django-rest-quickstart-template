@@ -27,10 +27,21 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+if os.environ.get('DEBUG', False) == 'True':
+	DEBUG = True
+	# SESSION_COOKIE_SECURE = False
+	# CSRF_COOKIE_SECURE = False
+	# SECURE_SSL_REDIRECT = False
+else:
+	DEBUG = False
+	# SECURE_HSTS_SECONDS = 60
+	# SECURE_SSL_REDIRECT = True
+	# SESSION_COOKIE_SECURE = True
+	# CSRF_COOKIE_SECURE = True
+	# SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+	# SECURE_HSTS_PRELOAD = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['0.0.0.0']
 
 # Application definition
 

@@ -1,0 +1,36 @@
+version: '3'
+services:
+  backend:
+    build: .
+    # command: python manage.py runsslserver 0.0.0.0:8000
+    command: gunicorn --bind 0.0.0.0:8000 backend.wsgi
+    # command: gunicorn --certfile=/etc/letsencrypt/live/${DOMAINE_NAME}/fullchain.pem --keyfile=/etc/letsencrypt/live/${DOMAINE_NAME}/privkey.pem --bind 0.0.0.0:443 backend.wsgi:app
+    volumes:
+      - .:/app
+      - static_files:/app/static
+    environment:
+      - DJANGO_SUPERUSER_USERNAME=${DJ_USER}
+      - DJANGO_SUPERUSER_PASSWORD=${DJ_PASSWORD}
+      - DJANGO_SUPERUSER_EMAIL=test@gmail.fr
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    restart: always
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+volumes:
+  postgres_data:
+# add save ?
+  static_files:
+    driver: local
+    driver_opts:
+      type: none
+      device: /var/www/${PROJECT_NAME}/static
+      o: bind

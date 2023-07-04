@@ -7,3 +7,5 @@ class Test(models.Model):
     name = models.CharField(max_length=255, blank=True, null=True)
     phone = models.CharField(max_length=255, blank=True, null=True)
     email = models.EmailField(blank=True, null=True)
+    def __str__(self):
+        return f'{self.name}'
