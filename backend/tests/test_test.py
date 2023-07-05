@@ -8,10 +8,6 @@ class TestView(TestCase):
         Test.objects.create(name='Test 1')
         Test.objects.create(name='Test 2')
 
-    def tearDown(self):
-        # Supprimer les données temporaires de la base de données
-        Test.objects.all().delete()
-
     def test_get(self):
         """Test the GET method of TestView. Returns all tests."""
         response = self.client.get('/tests/')
