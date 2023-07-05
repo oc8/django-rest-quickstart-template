@@ -1,0 +1,34 @@
+version: '3'
+services:
+  backend:
+    build: .
+    command: gunicorn --bind 0.0.0.0:80 backend.wsgi
+    volumes:
+      - .:/app
+      - test_static_files:/app/static
+    environment:
+      - DJANGO_SUPERUSER_USERNAME=${DJ_USER}
+      - DJANGO_SUPERUSER_PASSWORD=${DJ_PASSWORD}
+      - DJANGO_SUPERUSER_EMAIL=test@gmail.fr
+    ports:
+      - "8002:80"
+    depends_on:
+      - db
+    restart: always
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    volumes:
+      - test_postgres_data:/var/lib/postgresql/data/
+volumes:
+  test_postgres_data:
+  test_static_files:
+    driver: local
+    driver_opts:
+      type: none
+      device: /var/www/test-${PROJECT_NAME}/static
+      o: bind
+
