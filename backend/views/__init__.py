@@ -1,1 +1,1 @@
-from .test import TestView, TestsView
+from .test import *

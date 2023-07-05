@@ -1,1 +1,1 @@
-from .test import TestSerializer
+from .test import *
