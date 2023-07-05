@@ -7,9 +7,9 @@ from . import views
 
 schema_view = get_schema_view(
     openapi.Info(
-        title="Vision API",
+        title="Django API",
         default_version='v1',
-        description="API documentation - Vision",
+        description="API documentation",
         contact=openapi.Contact(email="contact@snippets.local"),
         license=openapi.License(name="BSD License"),
     ),
