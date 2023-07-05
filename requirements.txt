@@ -5,3 +5,5 @@ python-dotenv
 django-cors-headers
 gunicorn
 pytest
+django-filter
+drf-yasg

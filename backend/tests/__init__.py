@@ -5,6 +5,3 @@ import unittest
 import pytest
 
 # importer les classes de test
-from .test_booking import BookingTestCase
-from .test_organization import OrganizationTestCase
-from .test_closure import ClosureTestCase

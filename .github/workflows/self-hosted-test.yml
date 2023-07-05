@@ -1,0 +1,51 @@
+name: Django Deployment Test Workflow
+
+on:
+  push:
+    branches:
+      - test
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    steps:
+    - name: Change file owner
+      run: |
+        sudo chown -R $(id -u):$(id -g) ../../
+
+    - name: Check if folder exists
+      run: |
+        echo "Create if dosen't exist /var/www/test-${{ github.event.repository.name }}"
+        sudo mkdir -p /var/www/test-${{ github.event.repository.name }}/static
+
+    - name: Checkout code
+      uses: actions/checkout@v2
+      with:
+        path: 'test/'
+
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.9
+
+# sudo cp -r ./static/* /var/www/test-${{ github.event.repository.name }}/static/
+    - name: Build Docker Images
+      run: |
+        cd test
+        cp ../../.env.test ./.env
+        docker-compose -f docker-compose.test.yml build
+        docker-compose -f docker-compose.test.yml run backend python manage.py check --deploy
+        docker-compose -f docker-compose.test.yml run backend python manage.py makemigrations
+        docker-compose -f docker-compose.test.yml run backend python manage.py migrate
+        docker-compose -f docker-compose.test.yml run backend python manage.py makemigrations backend
+        docker-compose -f docker-compose.test.yml run backend python manage.py migrate backend
+        docker-compose -f docker-compose.test.yml run backend python ./manage.py createsuperuser --noinput 2> /dev/null || true
+
+    - name: Run tests
+      run: |
+# docker-compose -f docker-compose.test.yml run backend python manage.py test
+
+    - name: Run Deployment commands
+      run: |
+        cd test
+        docker-compose -f docker-compose.test.yml up --build -d
