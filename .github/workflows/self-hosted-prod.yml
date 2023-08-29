@@ -34,14 +34,13 @@ jobs:
         cp ../../.env .
         docker-compose -f docker-compose.prod.yml build
         docker-compose -f docker-compose.prod.yml run backend python manage.py check --deploy
-        docker-compose -f docker-compose.prod.yml run backend python manage.py makemigrations
         docker-compose -f docker-compose.prod.yml run backend python manage.py migrate
-        docker-compose -f docker-compose.prod.yml run backend python manage.py makemigrations backend
-        docker-compose -f docker-compose.prod.yml run backend python manage.py migrate backend
-        docker-compose -f docker-compose.prod.yml run backend python ./manage.py createsuperuser --noinput 2> /dev/null || true
+        docker-compose -f docker-compose.prod.yml run backend python manage.py createsuperuser --noinput 2> /dev/null || true
+        docker-compose -f docker-compose.prod.yml run backend python manage.py collectstatic --no-input
 
     - name: Run tests
       run: |
+        cd prod
 # docker-compose -f docker-compose.prod.yml run backend python manage.py test
 
     - name: Run Deployment commands
