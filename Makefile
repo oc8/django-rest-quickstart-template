@@ -27,6 +27,13 @@ db_update:
 	docker-compose run backend python manage.py makemigrations backend
 	docker-compose run backend python manage.py migrate backend
 
-.PHONY: build run test shell logs db
-.SILENT: build run test shell logs db
+clean:
+	docker-compose down
+
+fclean: clean
+	docker stop $$(docker-compose ps -qa)
+	docker rm $$(docker-compose ps -qa)
+
+.PHONY: build run test shell logs db clean fclean
+.SILENT: build run test shell logs db clean fclean
 .DEFAULT_GOAL := run
