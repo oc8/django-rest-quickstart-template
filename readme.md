@@ -19,8 +19,9 @@ This is a Django project that can be easily extended to meet your needs. It uses
 ## Installation
 
 1. Clone this repository to your computer
-2. Navigate to the project directory
-3. Start the server with the command `make`
+2. Navigate to the project directory 
+3. Copy the `.env.example` file to `.env` and fill in the environment variables
+4. Start the server with the command `make`
 
 ## Organization
 
