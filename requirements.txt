@@ -7,3 +7,5 @@ gunicorn
 pytest
 django-filter
 drf-yasg
+django-silk
+# django-debug-toolbar
